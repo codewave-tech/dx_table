@@ -21,7 +21,7 @@ class DxTableController {
 
   // table computation data
   late List<double> _columnWidths;
-  late double _rowHeight;
+  // late double _rowHeight;
 
   void _init(
     AnimationController animationController,
@@ -38,7 +38,7 @@ class DxTableController {
     required double rowHeight,
   }) {
     _columnWidths = columnWidths;
-    _rowHeight = rowHeight;
+    // _rowHeight = rowHeight;
   }
 
   bool _built = false;
