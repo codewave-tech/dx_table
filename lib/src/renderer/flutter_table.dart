@@ -11,15 +11,15 @@ import 'package:flutter/foundation.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart'
     hide
-        FixedColumnWidth,
-        FlexColumnWidth,
-        FractionColumnWidth,
-        IntrinsicColumnWidth,
-        MaxColumnWidth,
-        MinColumnWidth,
+        DxFixedColumnWidth,
+        DxFlexColumnWidth,
+        DxFractionColumnWidth,
+        DxIntrinsicColumnWidth,
+        DxMaxColumnWidth,
+        DxMinColumnWidth,
         TableBorder,
-        TableCellVerticalAlignment,
-        TableColumnWidth;
+        DxTableCellVerticalAlignment,
+        DxTableColumnWidth;
 
 // import 'basic.dart';
 // import 'debug.dart';
@@ -28,15 +28,15 @@ import 'package:flutter/widgets.dart'
 
 // export 'package:flutter/rendering.dart'
 //     show
-//         FixedColumnWidth,
-//         FlexColumnWidth,
-//         FractionColumnWidth,
-//         IntrinsicColumnWidth,
-//         MaxColumnWidth,
-//         MinColumnWidth,
+//         DxFixedColumnWidth,
+//         DxFlexColumnWidth,
+//         DxFractionColumnWidth,
+//         DxIntrinsicColumnWidth,
+//         DxMaxColumnWidth,
+//         DxMinColumnWidth,
 //         TableBorder,
-//         TableCellVerticalAlignment,
-//         TableColumnWidth;
+//         DxTableCellVerticalAlignment,
+//         DxTableColumnWidth;
 
 /// A horizontal group of cells in a [Table].
 ///
@@ -109,15 +109,15 @@ class _TableElementRow {
 ///
 /// Rows size vertically based on their contents. To control the individual
 /// column widths, use the [columnWidths] property to specify a
-/// [TableColumnWidth] for each column. If [columnWidths] is null, or there is a
+/// [DxTableColumnWidth] for each column. If [columnWidths] is null, or there is a
 /// null entry for a given column in [columnWidths], the table uses the
 /// [defaultColumnWidth] instead.
 ///
-/// By default, [defaultColumnWidth] is a [FlexColumnWidth]. This
-/// [TableColumnWidth] divides up the remaining space in the horizontal axis to
+/// By default, [defaultColumnWidth] is a [DxFlexColumnWidth]. This
+/// [DxTableColumnWidth] divides up the remaining space in the horizontal axis to
 /// determine the column width. If wrapping a [Table] in a horizontal
-/// [ScrollView], choose a different [TableColumnWidth], such as
-/// [FixedColumnWidth].
+/// [ScrollView], choose a different [DxTableColumnWidth], such as
+/// [DxFixedColumnWidth].
 ///
 /// For more details about the table layout algorithm, see [RenderTable].
 /// To control the alignment of children, see [TableCell].
@@ -134,16 +134,16 @@ class Table extends RenderObjectWidget {
     super.key,
     this.children = const <TableRow>[],
     this.columnWidths,
-    this.defaultColumnWidth = const FlexColumnWidth(),
+    this.defaultColumnWidth = const DxFlexColumnWidth(),
     this.textDirection,
     this.border,
-    this.defaultVerticalAlignment = TableCellVerticalAlignment.top,
+    this.defaultVerticalAlignment = DxTableCellVerticalAlignment.top,
     this.textBaseline, // NO DEFAULT: we don't know what the text's baseline should be
     required this.dxTableController,
   })  : assert(
-            defaultVerticalAlignment != TableCellVerticalAlignment.baseline ||
+            defaultVerticalAlignment != DxTableCellVerticalAlignment.baseline ||
                 textBaseline != null,
-            'textBaseline is required if you specify the defaultVerticalAlignment with TableCellVerticalAlignment.baseline'),
+            'textBaseline is required if you specify the defaultVerticalAlignment with DxTableCellVerticalAlignment.baseline'),
         assert(() {
           if (children.any((TableRow row1) =>
               row1.key != null &&
@@ -209,30 +209,30 @@ class Table extends RenderObjectWidget {
   /// [defaultColumnWidth] instead. By default, that uses flex sizing to
   /// distribute free space equally among the columns.
   ///
-  /// The [FixedColumnWidth] class can be used to specify a specific width in
+  /// The [DxFixedColumnWidth] class can be used to specify a specific width in
   /// pixels. That is the cheapest way to size a table's columns.
   ///
   /// The layout performance of the table depends critically on which column
-  /// sizing algorithms are used here. In particular, [IntrinsicColumnWidth] is
+  /// sizing algorithms are used here. In particular, [DxIntrinsicColumnWidth] is
   /// quite expensive because it needs to measure each cell in the column to
   /// determine the intrinsic size of the column.
   ///
   /// The keys of this map (column indexes) are zero-based.
   ///
   /// If this is set to null, then an empty map is assumed.
-  final Map<int, TableColumnWidth>? columnWidths;
+  final Map<int, DxTableColumnWidth>? columnWidths;
 
   /// How to determine with widths of columns that don't have an explicit sizing
   /// algorithm.
   ///
   /// Specifically, the [defaultColumnWidth] is used for column `i` if
-  /// `columnWidths[i]` is null. Defaults to [FlexColumnWidth], which will
+  /// `columnWidths[i]` is null. Defaults to [DxFlexColumnWidth], which will
   /// divide the remaining horizontal space up evenly between columns of the
-  /// same type [TableColumnWidth].
+  /// same type [DxTableColumnWidth].
   ///
-  /// A [Table] in a horizontal [ScrollView] must use a [FixedColumnWidth], or
-  /// an [IntrinsicColumnWidth] as the horizontal space is infinite.
-  final TableColumnWidth defaultColumnWidth;
+  /// A [Table] in a horizontal [ScrollView] must use a [DxFixedColumnWidth], or
+  /// an [DxIntrinsicColumnWidth] as the horizontal space is infinite.
+  final DxTableColumnWidth defaultColumnWidth;
 
   /// The direction in which the columns are ordered.
   ///
@@ -246,9 +246,9 @@ class Table extends RenderObjectWidget {
   ///
   /// Cells may specify a vertical alignment by wrapping their contents in a
   /// [TableCell] widget.
-  final TableCellVerticalAlignment defaultVerticalAlignment;
+  final DxTableCellVerticalAlignment defaultVerticalAlignment;
 
-  /// The text baseline to use when aligning rows using [TableCellVerticalAlignment.baseline].
+  /// The text baseline to use when aligning rows using [DxTableCellVerticalAlignment.baseline].
   ///
   /// This must be set if using baseline alignment. There is no default because there is no
   /// way for the framework to know the correct baseline _a priori_.
@@ -453,7 +453,7 @@ class TableCell extends ParentDataWidget<TableCellParentData> {
   });
 
   /// How this cell is aligned vertically.
-  final TableCellVerticalAlignment? verticalAlignment;
+  final DxTableCellVerticalAlignment? verticalAlignment;
 
   @override
   void applyParentData(RenderObject renderObject) {
@@ -461,7 +461,7 @@ class TableCell extends ParentDataWidget<TableCellParentData> {
         renderObject.parentData! as TableCellParentData;
     if (parentData.verticalAlignment != verticalAlignment) {
       parentData.verticalAlignment = verticalAlignment;
-      final RenderObject? targetParent = renderObject.parent;
+      final RenderObject? targetParent = renderObject.parent as RenderObject?;
       if (targetParent is RenderObject) {
         targetParent.markNeedsLayout();
       }
@@ -474,7 +474,7 @@ class TableCell extends ParentDataWidget<TableCellParentData> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(EnumProperty<TableCellVerticalAlignment>(
+    properties.add(EnumProperty<DxTableCellVerticalAlignment>(
         'verticalAlignment', verticalAlignment));
   }
 }

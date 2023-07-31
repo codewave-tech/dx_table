@@ -7,9 +7,9 @@ import 'package:flutter/material.dart'
     hide
         Table,
         TableRow,
-        TableCellVerticalAlignment,
-        TableColumnWidth,
-        IntrinsicColumnWidth;
+        DxTableCellVerticalAlignment,
+        DxTableColumnWidth,
+        DxIntrinsicColumnWidth;
 
 part 'dx_table_controller.dart';
 part 'dx_table_header.dart';
@@ -32,8 +32,8 @@ class DxTable extends StatefulWidget {
   final bool enableFilter;
   final bool enableSort;
   final double? height;
-  final TableColumnWidth tableColumnWidth;
-  final Map<int, TableColumnWidth>? columnWidthMap;
+  final DxTableColumnWidth tableColumnWidth;
+  final Map<int, DxTableColumnWidth>? columnWidthMap;
 
   const DxTable({
     super.key,
@@ -47,7 +47,7 @@ class DxTable extends StatefulWidget {
     this.enableFilter = false,
     this.enableSort = false,
     this.height,
-    this.tableColumnWidth = const IntrinsicColumnWidth(flex: null),
+    this.tableColumnWidth = const DxIntrinsicColumnWidth(flex: null),
     this.columnWidthMap,
   });
 
@@ -144,7 +144,7 @@ class _DxTableState extends State<DxTable> with SingleTickerProviderStateMixin {
                     return SingleChildScrollView(
                       child: Table(
                         defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
+                            DxTableCellVerticalAlignment.middle,
                         defaultColumnWidth: widget.tableColumnWidth,
                         columnWidths: widget.columnWidthMap,
                         children: [

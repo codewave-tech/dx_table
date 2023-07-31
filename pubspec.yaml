@@ -1,6 +1,6 @@
 name: dx_table
 description: Interactive Flutter table with hover, sort, filter, and sticky header.
-version: 1.0.0
+version: 1.0.2
 homepage: https://github.com/codewave-tech/dx_table
 
 environment:
@@ -15,6 +15,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  lints: ^2.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

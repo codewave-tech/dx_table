@@ -14,8 +14,8 @@ import 'package:flutter/rendering.dart' hide TableBorder;
 class TableCellParentData extends BoxParentData {
   /// Where this cell should be placed vertically.
   ///
-  /// When using [TableCellVerticalAlignment.baseline], the text baseline must be set as well.
-  TableCellVerticalAlignment? verticalAlignment;
+  /// When using [DxTableCellVerticalAlignment.baseline], the text baseline must be set as well.
+  DxTableCellVerticalAlignment? verticalAlignment;
 
   /// The column that the child was in the last time it was laid out.
   int? x;
@@ -30,18 +30,18 @@ class TableCellParentData extends BoxParentData {
 
 /// Base class to describe how wide a column in a [RenderTable] should be.
 ///
-/// To size a column to a specific number of pixels, use a [FixedColumnWidth].
+/// To size a column to a specific number of pixels, use a [DxFixedColumnWidth].
 /// This is the cheapest way to size a column.
 ///
-/// Other algorithms that are relatively cheap include [FlexColumnWidth], which
+/// Other algorithms that are relatively cheap include [DxFlexColumnWidth], which
 /// distributes the space equally among the flexible columns,
-/// [FractionColumnWidth], which sizes a column based on the size of the
+/// [DxFractionColumnWidth], which sizes a column based on the size of the
 /// table's container.
 @immutable
-abstract class TableColumnWidth {
+abstract class DxTableColumnWidth {
   /// Abstract const constructor. This constructor enables subclasses to provide
   /// const constructors so that they can be used in const expressions.
-  const TableColumnWidth();
+  const DxTableColumnWidth();
 
   /// The smallest width that the column can have.
   ///
@@ -78,7 +78,7 @@ abstract class TableColumnWidth {
   double? flex(Iterable<RenderBox> cells) => null;
 
   @override
-  String toString() => objectRuntimeType(this, 'TableColumnWidth');
+  String toString() => objectRuntimeType(this, 'DxTableColumnWidth');
 }
 
 /// Sizes the column according to the intrinsic dimensions of all the
@@ -89,7 +89,7 @@ abstract class TableColumnWidth {
 /// A flex value can be provided. If specified (and non-null), the
 /// column will participate in the distribution of remaining space
 /// once all the non-flexible columns have been sized.
-class IntrinsicColumnWidth extends TableColumnWidth {
+class DxIntrinsicColumnWidth extends DxTableColumnWidth {
   /// Creates a column width based on intrinsic sizing.
   ///
   /// This sizing algorithm is very expensive.
@@ -98,7 +98,7 @@ class IntrinsicColumnWidth extends TableColumnWidth {
   /// there is any room left over when laying out the table. If `flex` is
   /// null (the default), the table will not distribute any extra space to the
   /// column.
-  const IntrinsicColumnWidth({double? flex}) : _flex = flex;
+  const DxIntrinsicColumnWidth({double? flex}) : _flex = flex;
 
   @override
   double minIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) {
@@ -125,17 +125,17 @@ class IntrinsicColumnWidth extends TableColumnWidth {
 
   @override
   String toString() =>
-      '${objectRuntimeType(this, 'IntrinsicColumnWidth')}(flex: ${_flex?.toStringAsFixed(1)})';
+      '${objectRuntimeType(this, 'DxIntrinsicColumnWidth')}(flex: ${_flex?.toStringAsFixed(1)})';
 }
 
 /// Sizes the column to a specific number of pixels.
 ///
 /// This is the cheapest way to size a column.
-class FixedColumnWidth extends TableColumnWidth {
+class DxFixedColumnWidth extends DxTableColumnWidth {
   /// Creates a column width based on a fixed number of logical pixels.
   ///
   /// The [value] argument must not be null.
-  const FixedColumnWidth(this.value);
+  const DxFixedColumnWidth(this.value);
 
   /// The width the column should occupy in logical pixels.
   final double value;
@@ -152,18 +152,18 @@ class FixedColumnWidth extends TableColumnWidth {
 
   @override
   String toString() =>
-      '${objectRuntimeType(this, 'FixedColumnWidth')}(${debugFormatDouble(value)})';
+      '${objectRuntimeType(this, 'DxFixedColumnWidth')}(${debugFormatDouble(value)})';
 }
 
 /// Sizes the column to a fraction of the table's constraints' maxWidth.
 ///
 /// This is a cheap way to size a column.
-class FractionColumnWidth extends TableColumnWidth {
+class DxFractionColumnWidth extends DxTableColumnWidth {
   /// Creates a column width based on a fraction of the table's constraints'
   /// maxWidth.
   ///
   /// The [value] argument must not be null.
-  const FractionColumnWidth(this.value);
+  const DxFractionColumnWidth(this.value);
 
   /// The fraction of the table's constraints' maxWidth that this column should
   /// occupy.
@@ -187,22 +187,22 @@ class FractionColumnWidth extends TableColumnWidth {
 
   @override
   String toString() =>
-      '${objectRuntimeType(this, 'FractionColumnWidth')}($value)';
+      '${objectRuntimeType(this, 'DxFractionColumnWidth')}($value)';
 }
 
 /// Sizes the column by taking a part of the remaining space once all
 /// the other columns have been laid out.
 ///
-/// For example, if two columns have a [FlexColumnWidth], then half the
+/// For example, if two columns have a [DxFlexColumnWidth], then half the
 /// space will go to one and half the space will go to the other.
 ///
 /// This is a cheap way to size a column.
-class FlexColumnWidth extends TableColumnWidth {
+class DxFlexColumnWidth extends DxTableColumnWidth {
   /// Creates a column width based on a fraction of the remaining space once all
   /// the other columns have been laid out.
   ///
   /// The [value] argument must not be null.
-  const FlexColumnWidth([this.value = 1.0]);
+  const DxFlexColumnWidth([this.value = 1.0]);
 
   /// The fraction of the remaining space once all the other columns have
   /// been laid out that this column should occupy.
@@ -225,7 +225,7 @@ class FlexColumnWidth extends TableColumnWidth {
 
   @override
   String toString() =>
-      '${objectRuntimeType(this, 'FlexColumnWidth')}(${debugFormatDouble(value)})';
+      '${objectRuntimeType(this, 'DxFlexColumnWidth')}(${debugFormatDouble(value)})';
 }
 
 /// Sizes the column such that it is the size that is the maximum of
@@ -234,19 +234,19 @@ class FlexColumnWidth extends TableColumnWidth {
 /// For example, to have a column be 10% of the container width or
 /// 100px, whichever is bigger, you could use:
 ///
-///     const MaxColumnWidth(const FixedColumnWidth(100.0), FractionColumnWidth(0.1))
+///     const DxMaxColumnWidth(const DxFixedColumnWidth(100.0), DxFractionColumnWidth(0.1))
 ///
 /// Both specifications are evaluated, so if either specification is
 /// expensive, so is this.
-class MaxColumnWidth extends TableColumnWidth {
+class DxMaxColumnWidth extends DxTableColumnWidth {
   /// Creates a column width that is the maximum of two other column widths.
-  const MaxColumnWidth(this.a, this.b);
+  const DxMaxColumnWidth(this.a, this.b);
 
   /// A lower bound for the width of this column.
-  final TableColumnWidth a;
+  final DxTableColumnWidth a;
 
   /// Another lower bound for the width of this column.
-  final TableColumnWidth b;
+  final DxTableColumnWidth b;
 
   @override
   double minIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) {
@@ -278,7 +278,7 @@ class MaxColumnWidth extends TableColumnWidth {
   }
 
   @override
-  String toString() => '${objectRuntimeType(this, 'MaxColumnWidth')}($a, $b)';
+  String toString() => '${objectRuntimeType(this, 'DxMaxColumnWidth')}($a, $b)';
 }
 
 /// Sizes the column such that it is the size that is the minimum of
@@ -287,19 +287,19 @@ class MaxColumnWidth extends TableColumnWidth {
 /// For example, to have a column be 10% of the container width but
 /// never bigger than 100px, you could use:
 ///
-///     const MinColumnWidth(const FixedColumnWidth(100.0), FractionColumnWidth(0.1))
+///     const DxMinColumnWidth(const DxFixedColumnWidth(100.0), DxFractionColumnWidth(0.1))
 ///
 /// Both specifications are evaluated, so if either specification is
 /// expensive, so is this.
-class MinColumnWidth extends TableColumnWidth {
+class DxMinColumnWidth extends DxTableColumnWidth {
   /// Creates a column width that is the minimum of two other column widths.
-  const MinColumnWidth(this.a, this.b);
+  const DxMinColumnWidth(this.a, this.b);
 
   /// An upper bound for the width of this column.
-  final TableColumnWidth a;
+  final DxTableColumnWidth a;
 
   /// Another upper bound for the width of this column.
-  final TableColumnWidth b;
+  final DxTableColumnWidth b;
 
   @override
   double minIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) {
@@ -331,14 +331,14 @@ class MinColumnWidth extends TableColumnWidth {
   }
 
   @override
-  String toString() => '${objectRuntimeType(this, 'MinColumnWidth')}($a, $b)';
+  String toString() => '${objectRuntimeType(this, 'DxMinColumnWidth')}($a, $b)';
 }
 
 /// Vertical alignment options for cells in [RenderTable] objects.
 ///
 /// This is specified using [TableCellParentData] objects on the
 /// [RenderObject.parentData] of the children of the [RenderTable].
-enum TableCellVerticalAlignment {
+enum DxTableCellVerticalAlignment {
   /// Cells with this alignment are placed with their top at the top of the row.
   top,
 
@@ -380,15 +380,15 @@ class RenderTable extends RenderBox {
   RenderTable({
     int? columns,
     int? rows,
-    Map<int, TableColumnWidth>? columnWidths,
-    TableColumnWidth defaultColumnWidth = const FlexColumnWidth(),
+    Map<int, DxTableColumnWidth>? columnWidths,
+    DxTableColumnWidth defaultColumnWidth = const DxFlexColumnWidth(),
     required TextDirection textDirection,
     required DxTableController dxTableController,
     TableBorder? border,
     List<Decoration?>? rowDecorations,
     ImageConfiguration configuration = ImageConfiguration.empty,
-    TableCellVerticalAlignment defaultVerticalAlignment =
-        TableCellVerticalAlignment.top,
+    DxTableCellVerticalAlignment defaultVerticalAlignment =
+        DxTableCellVerticalAlignment.top,
     TextBaseline? textBaseline,
     List<List<RenderBox>>? children,
   })  : assert(columns == null || columns >= 0),
@@ -400,7 +400,7 @@ class RenderTable extends RenderBox {
                 ? children.first.length
                 : 0),
         _rows = rows ?? 0,
-        _columnWidths = columnWidths ?? HashMap<int, TableColumnWidth>(),
+        _columnWidths = columnWidths ?? HashMap<int, DxTableColumnWidth>(),
         _defaultColumnWidth = defaultColumnWidth,
         _border = border,
         _textBaseline = textBaseline,
@@ -485,29 +485,29 @@ class RenderTable extends RenderBox {
   /// [defaultColumnWidth] instead.
   ///
   /// The layout performance of the table depends critically on which column
-  /// sizing algorithms are used here. In particular, [IntrinsicColumnWidth] is
+  /// sizing algorithms are used here. In particular, [DxIntrinsicColumnWidth] is
   /// quite expensive because it needs to measure each cell in the column to
   /// determine the intrinsic size of the column.
   ///
   /// This property can never return null. If it is set to null, and the existing
   /// map is not empty, then the value is replaced by an empty map. (If it is set
   /// to null while the current value is an empty map, the value is not changed.)
-  Map<int, TableColumnWidth>? get columnWidths =>
-      Map<int, TableColumnWidth>.unmodifiable(_columnWidths);
-  Map<int, TableColumnWidth> _columnWidths;
-  set columnWidths(Map<int, TableColumnWidth>? value) {
+  Map<int, DxTableColumnWidth>? get columnWidths =>
+      Map<int, DxTableColumnWidth>.unmodifiable(_columnWidths);
+  Map<int, DxTableColumnWidth> _columnWidths;
+  set columnWidths(Map<int, DxTableColumnWidth>? value) {
     if (_columnWidths == value) {
       return;
     }
     if (_columnWidths.isEmpty && value == null) {
       return;
     }
-    _columnWidths = value ?? HashMap<int, TableColumnWidth>();
+    _columnWidths = value ?? HashMap<int, DxTableColumnWidth>();
     markNeedsLayout();
   }
 
   /// Determines how the width of column with the given index is determined.
-  void setColumnWidth(int column, TableColumnWidth value) {
+  void setColumnWidth(int column, DxTableColumnWidth value) {
     if (_columnWidths[column] == value) {
       return;
     }
@@ -519,9 +519,9 @@ class RenderTable extends RenderBox {
   ///
   /// Specifically, the [defaultColumnWidth] is used for column `i` if
   /// `columnWidths[i]` is null.
-  TableColumnWidth get defaultColumnWidth => _defaultColumnWidth;
-  TableColumnWidth _defaultColumnWidth;
-  set defaultColumnWidth(TableColumnWidth value) {
+  DxTableColumnWidth get defaultColumnWidth => _defaultColumnWidth;
+  DxTableColumnWidth _defaultColumnWidth;
+  set defaultColumnWidth(DxTableColumnWidth value) {
     if (defaultColumnWidth == value) {
       return;
     }
@@ -591,10 +591,10 @@ class RenderTable extends RenderBox {
   }
 
   /// How cells that do not explicitly specify a vertical alignment are aligned vertically.
-  TableCellVerticalAlignment get defaultVerticalAlignment =>
+  DxTableCellVerticalAlignment get defaultVerticalAlignment =>
       _defaultVerticalAlignment;
-  TableCellVerticalAlignment _defaultVerticalAlignment;
-  set defaultVerticalAlignment(TableCellVerticalAlignment value) {
+  DxTableCellVerticalAlignment _defaultVerticalAlignment;
+  set defaultVerticalAlignment(DxTableCellVerticalAlignment value) {
     if (_defaultVerticalAlignment == value) {
       return;
     }
@@ -602,7 +602,7 @@ class RenderTable extends RenderBox {
     markNeedsLayout();
   }
 
-  /// The text baseline to use when aligning rows using [TableCellVerticalAlignment.baseline].
+  /// The text baseline to use when aligning rows using [DxTableCellVerticalAlignment.baseline].
   TextBaseline? get textBaseline => _textBaseline;
   TextBaseline? _textBaseline;
   set textBaseline(TextBaseline? value) {
@@ -788,7 +788,7 @@ class RenderTable extends RenderBox {
     assert(_children.length == rows * columns);
     double totalMinWidth = 0.0;
     for (int x = 0; x < columns; x += 1) {
-      final TableColumnWidth columnWidth =
+      final DxTableColumnWidth columnWidth =
           _columnWidths[x] ?? defaultColumnWidth;
       final Iterable<RenderBox> columnCells = column(x);
       totalMinWidth +=
@@ -802,7 +802,7 @@ class RenderTable extends RenderBox {
     assert(_children.length == rows * columns);
     double totalMaxWidth = 0.0;
     for (int x = 0; x < columns; x += 1) {
-      final TableColumnWidth columnWidth =
+      final DxTableColumnWidth columnWidth =
           _columnWidths[x] ?? defaultColumnWidth;
       final Iterable<RenderBox> columnCells = column(x);
       totalMaxWidth +=
@@ -901,7 +901,7 @@ class RenderTable extends RenderBox {
         0.0; // sum of the maxIntrinsicWidths of any column that has null flex
     double totalFlex = 0.0;
     for (int x = 0; x < columns; x += 1) {
-      final TableColumnWidth columnWidth =
+      final DxTableColumnWidth columnWidth =
           _columnWidths[x] ?? defaultColumnWidth;
       final Iterable<RenderBox> columnCells = column(x);
       // apply ideal width (maxIntrinsicWidth)
@@ -1086,19 +1086,19 @@ class RenderTable extends RenderBox {
               child.parentData! as TableCellParentData;
           switch (
               childParentData.verticalAlignment ?? defaultVerticalAlignment) {
-            case TableCellVerticalAlignment.baseline:
+            case DxTableCellVerticalAlignment.baseline:
               assert(debugCannotComputeDryLayout(
                 reason:
-                    'TableCellVerticalAlignment.baseline requires a full layout for baseline metrics to be available.',
+                    'DxTableCellVerticalAlignment.baseline requires a full layout for baseline metrics to be available.',
               ));
               return Size.zero;
-            case TableCellVerticalAlignment.top:
-            case TableCellVerticalAlignment.middle:
-            case TableCellVerticalAlignment.bottom:
+            case DxTableCellVerticalAlignment.top:
+            case DxTableCellVerticalAlignment.middle:
+            case DxTableCellVerticalAlignment.bottom:
               final Size childSize =
                   child.getDryLayout(BoxConstraints.tightFor(width: widths[x]));
               rowHeight = math.max(rowHeight, childSize.height);
-            case TableCellVerticalAlignment.fill:
+            case DxTableCellVerticalAlignment.fill:
               break;
           }
         }
@@ -1160,7 +1160,7 @@ class RenderTable extends RenderBox {
           childParentData.y = y;
           switch (
               childParentData.verticalAlignment ?? defaultVerticalAlignment) {
-            case TableCellVerticalAlignment.baseline:
+            case DxTableCellVerticalAlignment.baseline:
               assert(textBaseline != null,
                   'An explicit textBaseline is required when using baseline alignment.');
               child.layout(BoxConstraints.tightFor(width: widths[x]),
@@ -1178,13 +1178,13 @@ class RenderTable extends RenderBox {
                 rowHeight = math.max(rowHeight, child.size.height);
                 childParentData.offset = Offset(positions[x], rowTop);
               }
-            case TableCellVerticalAlignment.top:
-            case TableCellVerticalAlignment.middle:
-            case TableCellVerticalAlignment.bottom:
+            case DxTableCellVerticalAlignment.top:
+            case DxTableCellVerticalAlignment.middle:
+            case DxTableCellVerticalAlignment.bottom:
               child.layout(BoxConstraints.tightFor(width: widths[x]),
                   parentUsesSize: true);
               rowHeight = math.max(rowHeight, child.size.height);
-            case TableCellVerticalAlignment.fill:
+            case DxTableCellVerticalAlignment.fill:
               break;
           }
         }
@@ -1204,18 +1204,18 @@ class RenderTable extends RenderBox {
               child.parentData! as TableCellParentData;
           switch (
               childParentData.verticalAlignment ?? defaultVerticalAlignment) {
-            case TableCellVerticalAlignment.baseline:
+            case DxTableCellVerticalAlignment.baseline:
               childParentData.offset = Offset(
                   positions[x], rowTop + beforeBaselineDistance - baselines[x]);
-            case TableCellVerticalAlignment.top:
+            case DxTableCellVerticalAlignment.top:
               childParentData.offset = Offset(positions[x], rowTop);
-            case TableCellVerticalAlignment.middle:
+            case DxTableCellVerticalAlignment.middle:
               childParentData.offset = Offset(
                   positions[x], rowTop + (rowHeight - child.size.height) / 2.0);
-            case TableCellVerticalAlignment.bottom:
+            case DxTableCellVerticalAlignment.bottom:
               childParentData.offset =
                   Offset(positions[x], rowTop + rowHeight - child.size.height);
-            case TableCellVerticalAlignment.fill:
+            case DxTableCellVerticalAlignment.fill:
               child.layout(
                   BoxConstraints.tightFor(width: widths[x], height: rowHeight));
               childParentData.offset = Offset(positions[x], rowTop);
@@ -1316,12 +1316,12 @@ class RenderTable extends RenderBox {
     super.debugFillProperties(properties);
     properties.add(
         DiagnosticsProperty<TableBorder>('border', border, defaultValue: null));
-    properties.add(DiagnosticsProperty<Map<int, TableColumnWidth>>(
+    properties.add(DiagnosticsProperty<Map<int, DxTableColumnWidth>>(
         'specified column widths', _columnWidths,
         level: _columnWidths.isEmpty
             ? DiagnosticLevel.hidden
             : DiagnosticLevel.info));
-    properties.add(DiagnosticsProperty<TableColumnWidth>(
+    properties.add(DiagnosticsProperty<DxTableColumnWidth>(
         'default column width', defaultColumnWidth));
     properties.add(MessageProperty('table size', '$columns\u00D7$rows'));
     properties.add(IterableProperty<String>(
