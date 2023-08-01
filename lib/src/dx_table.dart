@@ -3,13 +3,7 @@ library dx_table;
 
 import 'package:dx_table/src/renderer/flutter_table.dart';
 import 'package:dx_table/src/renderer/rendering.dart';
-import 'package:flutter/material.dart'
-    hide
-        Table,
-        TableRow,
-        DxTableCellVerticalAlignment,
-        DxTableColumnWidth,
-        DxIntrinsicColumnWidth;
+import 'package:flutter/material.dart' hide Table, TableRow;
 
 part 'dx_table_controller.dart';
 part 'dx_table_header.dart';
@@ -30,7 +24,7 @@ class DxTable extends StatefulWidget {
   final DxTableController dxTableController;
   final DxRowClickCallback? onClick;
   final bool enableFilter;
-  final bool enableSort;
+
   final double? height;
   final DxTableColumnWidth tableColumnWidth;
   final Map<int, DxTableColumnWidth>? columnWidthMap;
@@ -45,7 +39,6 @@ class DxTable extends StatefulWidget {
     this.margin,
     this.onClick,
     this.enableFilter = false,
-    this.enableSort = false,
     this.height,
     this.tableColumnWidth = const DxIntrinsicColumnWidth(flex: null),
     this.columnWidthMap,
@@ -88,28 +81,6 @@ class _DxTableState extends State<DxTable> with SingleTickerProviderStateMixin {
     setState(() {});
   }
 
-  // void _renderStickyHeader() {
-  //   OverlayEntry overlayEntry = OverlayEntry(
-  //     builder: (context) {
-  //       return Positioned(
-  //         top: 0,
-  //         child: Row(
-  //           children: widget.dxTableController._columnWidths
-  //               .map((e) => Container(
-  //                     height: widget.dxTableController._rowHeight,
-  //                     width: e,
-  //                     color: Colors.primaries[
-  //                         Random().nextInt(Colors.primaries.length - 1)],
-  //                   ))
-  //               .toList(),
-  //         ),
-  //       );
-  //     },
-  //   );
-
-  //   Overlay.of(context).insert(overlayEntry);
-  // }
-
   @override
   void dispose() {
     widget.dxTableController.dispose();
@@ -148,9 +119,11 @@ class _DxTableState extends State<DxTable> with SingleTickerProviderStateMixin {
                         defaultColumnWidth: widget.tableColumnWidth,
                         columnWidths: widget.columnWidthMap,
                         children: [
-                          ...widget.dxTableController._filteredRows.map(
-                            (e) => e._build,
-                          ),
+                          ...List<TableRow>.generate(
+                              widget.dxTableController._filteredRows.length,
+                              (index) => widget
+                                  .dxTableController._filteredRows[index]
+                                  ._build(index)),
                         ],
                         dxTableController: widget.dxTableController,
                       ),

@@ -41,12 +41,16 @@ class _MainAppState extends State<MainApp> {
             animationDuration: const Duration(microseconds: 0),
             header: DxTableHeader(
               titleAlignment: Alignment.centerLeft,
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.deepPurple,
               titles:
                   TableData.headerTitles.map((e) => _headerElement(e)).toList(),
             ),
             rows: TableData.players.map((e) => dxTableRow(e)).toList(),
             dxTableController: dxTableController,
+            onClick: (index) {
+              dxTableController.select(index, refreshState: true);
+              print(index);
+            },
           ),
         ),
       ),
@@ -56,23 +60,90 @@ class _MainAppState extends State<MainApp> {
   DxHeaderElement _headerElement(String title) {
     return DxHeaderElement(
       align: Alignment.centerLeft,
-      backgroundColor:
-          Colors.primaries[Random().nextInt(Colors.primaries.length - 1)],
+
+      sortingMechanism: DxTableSortMechanism<String>(
+        comparator: (a, b) => a.compareTo(b) < 0,
+      ),
+      // backgroundColor:
+      //     Colors.primaries[Random().nextInt(Colors.primaries.length - 1)],
       builder: (context, sortState, index) {
-        return Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 5),
+            _sortStateBasedArrow(sortState, index)
+          ],
         );
       },
     );
+  }
+
+  Widget _sortStateBasedArrow(DxTableSortState sortState, int index) {
+    switch (sortState) {
+      case DxTableSortState.unsorted:
+        return InkWell(
+          onTap: () => dxTableController.sort(index),
+          child: const SizedBox(
+            height: 10,
+            width: 10,
+            child: RotatedBox(
+              quarterTurns: 3,
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 10,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        );
+      case DxTableSortState.sorted:
+        return InkWell(
+          onTap: () => dxTableController.sort(index),
+          child: const SizedBox(
+            height: 10,
+            width: 10,
+            child: RotatedBox(
+              quarterTurns: 3,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 10,
+              ),
+            ),
+          ),
+        );
+      case DxTableSortState.reversed:
+        return InkWell(
+          onTap: () => dxTableController.clearSort(),
+          child: const SizedBox(
+            height: 10,
+            width: 10,
+            child: RotatedBox(
+              quarterTurns: 1,
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 10,
+              ),
+            ),
+          ),
+        );
+    }
   }
 
   DxTableRow dxTableRow(PlayerDataModel playerDataModel) {
     return DxTableRow(
       backgroundColor: Colors.white,
       hoverColor: Colors.grey,
+      selectedColor: Colors.grey,
+      enableSelection: true,
       children: [
         _rowElement(playerDataModel.id.toString()),
         _rowElement(playerDataModel.name),
@@ -87,7 +158,8 @@ class _MainAppState extends State<MainApp> {
   }
 
   DxTableRowElement<dynamic> _rowElement(String value) {
-    return DxTableRowElement(
+    return DxTableRowElement<String>(
+      sortElement: value,
       builder: (context, isSelected, isHovered, hoverValue, rowIndex) {
         return Text(
           value,

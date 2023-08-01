@@ -37,7 +37,7 @@ class DxTableRowElement<T> {
     this.sortElement,
   });
 
-  Widget get _build {
+  Widget _build(int currentIndex) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (event) => _tc._startedRowHover(_index),
@@ -56,7 +56,7 @@ class DxTableRowElement<T> {
             _index == _tc._selectedIndex,
             _index == _tc._activeHoverIndex,
             _tc._getValue(_index),
-            _index,
+            currentIndex,
           ),
         ),
       ),

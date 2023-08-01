@@ -9,17 +9,7 @@ import 'package:dx_table/src/renderer/flutter_table_border.dart';
 import 'package:dx_table/src/renderer/rendering.dart';
 import 'package:flutter/foundation.dart';
 // import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart'
-    hide
-        DxFixedColumnWidth,
-        DxFlexColumnWidth,
-        DxFractionColumnWidth,
-        DxIntrinsicColumnWidth,
-        DxMaxColumnWidth,
-        DxMinColumnWidth,
-        TableBorder,
-        DxTableCellVerticalAlignment,
-        DxTableColumnWidth;
+import 'package:flutter/widgets.dart' hide TableBorder;
 
 // import 'basic.dart';
 // import 'debug.dart';

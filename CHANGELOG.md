@@ -15,3 +15,8 @@
 
 - resolved name conflicts for `TableColumnWidth`s
 - exposed it to used
+
+## 1.0.3
+
+- removed unnecessary properties
+- fixed bugs

@@ -43,17 +43,17 @@ class DxTableRow {
 
   List<Widget> elementsCache = [];
 
-  TableRow get _build {
-    _generateElementCache();
+  TableRow _build(int currentRowIndex) {
+    _generateElementCache(currentRowIndex);
     return _renderRow();
   }
 
-  void _generateElementCache({bool regenerate = false}) {
+  void _generateElementCache(int currentRowIndex, {bool regenerate = false}) {
     if (!regenerate) elementsCache.clear();
     for (int idx = 0; idx < children.length; idx++) {
       DxTableRowElement ele = children[idx];
       if (!regenerate) ele._init(_context, _tc, _index);
-      elementsCache.add(ele._build);
+      elementsCache.add(ele._build(currentRowIndex));
     }
   }
 
